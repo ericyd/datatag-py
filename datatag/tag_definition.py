@@ -1,7 +1,7 @@
-class Definition():
-    """Definitions are how traits are defined.
-    Definitions hold the bitflag associated with the trait,
-    as well as the function which defines the trait."""
+class TagDefinition():
+    """TagDefinitions are how tags are defined.
+    TagDefinitions hold the bitflag associated with the tag,
+    as well as the function which defines the tag."""
 
     def __init__(self, integer, func):
         # the bitflag should be a power of 2 because that ensures uniqueness

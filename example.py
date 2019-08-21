@@ -1,5 +1,5 @@
-# TODO: how to export TraitSet directly from `inclusion` package...?
-from inclusion.traitset import TraitSet
+# TODO: how to export TagSet directly from `inclusion` package...?
+from datatag import TagSet
 
 # helper methods to assist with printing
 def title(string):
@@ -12,28 +12,28 @@ def title(string):
 
 def print_results(params):
     print("Query params: {}".format(params))
-    print("Results: {}\n".format(traitset.query(params)))
+    print("Results: {}\n".format(tagset.query(params)))
 
 
 
 
-# instantiate our TraitSet
-traitset = TraitSet()
+# instantiate our TagSet
+tagset = TagSet()
 
 
 
 
-# define some traits for our TraitSet.
-# In this example we have two traits:
+# define some tags for our TagSet.
+# In this example we have two tags:
 #   `has_an_e` will be True any data that contains an 'e'
 #   `greater_than_3_chars` will be True for any data that has more than 3 characters
 #
-# Note that traits can be defined with either a lambda or a function
+# Note that tags can be defined with either a lambda or a function
 def greater_than_three_chars(datum):
     return len(datum) > 3
 
-traitset.define_trait('has_an_e', lambda d: 'e' in d.lower())
-traitset.define_trait('greater_than_3_chars', greater_than_three_chars)
+tagset.define_tag('has_an_e', lambda d: 'e' in d.lower())
+tagset.define_tag('greater_than_3_chars', greater_than_three_chars)
 
 
 
@@ -47,7 +47,7 @@ words = paragraph.split(' ')
 
 # analyze our dataset.
 # This step is required before we can query for matching data
-traitset.analyze(words)
+tagset.analyze(words)
 
 
 
@@ -80,7 +80,7 @@ print_results({'has_an_e': False, 'greater_than_3_chars': False})
 
 title("By default, `analyze` will append data to the existing dataset")
 extra_words = ['on', 'to']
-traitset.analyze(extra_words)
+tagset.analyze(extra_words)
 print_results({'has_an_e': False, 'greater_than_3_chars': False})
 # => Results: ['go', 'on', 'to']
 
@@ -88,9 +88,9 @@ print_results({'has_an_e': False, 'greater_than_3_chars': False})
 
 
 
-title("If we want to analyze a fresh dataset, we can purge the existing data from our TraitSet")
+title("If we want to analyze a fresh dataset, we can purge the existing data from our TagSet")
 extra_words = ['on', 'to']
-traitset.analyze(extra_words, purge = True)
+tagset.analyze(extra_words, purge = True)
 print_results({'has_an_e': False, 'greater_than_3_chars': False})
 # => Results: ['on', 'to']
 
@@ -103,7 +103,7 @@ print_results({'has_an_e': True, 'greater_than_3_chars': False})
 
 title("Note: omitted parameters are ignored, meaning they are allowed to be either True or False")
 new_words = ['fresh', 'me', 'frish', 'mi']
-traitset.analyze(new_words, purge = True)
+tagset.analyze(new_words, purge = True)
 print_results({'has_an_e': True})
 # => Results: ['fresh', 'me']
 
