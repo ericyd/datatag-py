@@ -11,8 +11,10 @@ def title(string):
     print("")
 
 def print_results(params):
+    results = tagset.query(params)
     print("Query params: {}".format(params))
-    print("Results: {}\n".format(tagset.query(params)))
+    print("Results: {}\n".format(results))
+    return results
 
 
 
@@ -61,17 +63,17 @@ params = {
     'greater_than_3_chars': True
 }
 
-print_results(params)
-# => Results: ['Lorem', 'amet', 'leggings', 'chillwave']
+results = print_results(params)
+assert results == ['Lorem', 'amet', 'leggings', 'chillwave']
 
-print_results({'has_an_e': True, 'greater_than_3_chars': False})
-# => Results: ['tie']
+results = print_results({'has_an_e': True, 'greater_than_3_chars': False})
+assert results == ['tie']
 
-print_results({'has_an_e': False, 'greater_than_3_chars': True})
-# => Results: ['ipsum', 'dolor', 'vinyl']
+results = print_results({'has_an_e': False, 'greater_than_3_chars': True})
+assert results == ['ipsum', 'dolor', 'vinyl']
 
-print_results({'has_an_e': False, 'greater_than_3_chars': False})
-# => Results: ['go']
+results = print_results({'has_an_e': False, 'greater_than_3_chars': False})
+assert results == ['go']
 
 
 
@@ -81,8 +83,8 @@ print_results({'has_an_e': False, 'greater_than_3_chars': False})
 title("By default, `analyze` will append data to the existing dataset")
 extra_words = ['on', 'to']
 tagset.analyze(extra_words)
-print_results({'has_an_e': False, 'greater_than_3_chars': False})
-# => Results: ['go', 'on', 'to']
+results = print_results({'has_an_e': False, 'greater_than_3_chars': False})
+assert results == ['go', 'on', 'to']
 
 
 
@@ -91,21 +93,47 @@ print_results({'has_an_e': False, 'greater_than_3_chars': False})
 title("If we want to analyze a fresh dataset, we can purge the existing data from our TagSet")
 extra_words = ['on', 'to']
 tagset.analyze(extra_words, purge = True)
-print_results({'has_an_e': False, 'greater_than_3_chars': False})
-# => Results: ['on', 'to']
+results = print_results({'has_an_e': False, 'greater_than_3_chars': False})
+assert results == ['on', 'to']
 
-print_results({'has_an_e': True, 'greater_than_3_chars': False})
-# => Results: []
+results = print_results({'has_an_e': True, 'greater_than_3_chars': False})
+assert results == []
 
 
 
 
 
 title("Note: omitted parameters are ignored, meaning they are allowed to be either True or False")
-new_words = ['fresh', 'me', 'frish', 'mi']
+new_words = ['fresh', 'me', 'squash', 'too']
 tagset.analyze(new_words, purge = True)
-print_results({'has_an_e': True})
-# => Results: ['fresh', 'me']
+results = print_results({'has_an_e': True})
+assert results == ['fresh', 'me']
 
-print_results({'greater_than_3_chars': True})
-# => Results: ['fresh', 'frish']
+results = print_results({'greater_than_3_chars': True})
+assert results == ['fresh', 'squash']
+
+
+
+
+
+title("If you define a new tag after data has already been analyzed, just call analyze again to re-evaluate data")
+tagset.define_tag('has_o_or_e', lambda x: 'e' in x or 'o' in x)
+tagset.analyze()
+results = print_results({'has_o_or_e': True})
+assert results == ['fresh', 'me', 'too']
+
+
+
+
+title("You can also analyze complex classes of data instead of base data types. Just adjust your tag definitions accordingly")
+class TestClass():
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+
+tagset = TagSet()
+tagset.define_tag('value_is_true', lambda x: x.value == True)
+data = [TestClass('True1', True), TestClass('False1', False), TestClass('True2', True), TestClass('False2', False)]
+tagset.analyze(data)
+results = print_results({'value_is_true': True})
+assert [r.name for r in results] == ['True1', 'True2']

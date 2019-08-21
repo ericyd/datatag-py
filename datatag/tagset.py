@@ -45,10 +45,9 @@ class TagSet():
         if purge:
             self.__purge_dataset()
 
-        # if iterable, process all items in collection
-        self.dataset.extend(
-            map(self.__analyze_datum, data)
-        )
+        # re-process existing data and append with new data
+        self.dataset = [self.__analyze_datum(d.value) for d in self.dataset]
+        self.dataset.extend(map(self.__analyze_datum, data))
 
     # Analyze datum for each defined tag.
     # return: TaggedDatum
@@ -65,12 +64,6 @@ class TagSet():
 
     def __purge_dataset(self):
         self.dataset = []
-
-    def pickle(self, filepath = None):
-        print("Method not yet implemented. Goal is to be able to save a TagSet with all analyzed data and defined tags")
-
-    def dump(self, filepath = None):
-        print("Method not yet implemented. Goal is to be able to save the analyzed data in some serializable form")
 
     # returns list of values that match the requested tags
     def query(self, tags = {}):
@@ -109,3 +102,6 @@ class TagSet():
     def __is_included(self, mask, positive, negative = 0):
         """Check if a mask includes a positive number and excludes a negative number"""
         return mask & positive == positive and mask & negative == 0
+
+    def pickle(self, filepath = None):
+        print("Method not yet implemented. Goal is to be able to save a TagSet with all analyzed data and defined tags")
