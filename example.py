@@ -1,4 +1,3 @@
-# TODO: how to export TagSet directly from `inclusion` package...?
 from datatag import TagSet
 
 # helper methods to assist with printing
