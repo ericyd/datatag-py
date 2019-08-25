@@ -1,5 +1,5 @@
 from functools import reduce
-from .exceptions import UndefinedTag, TagNotUnique, NonBooleanQueryValue, ArgumentNotCallable
+from .exceptions import UndefinedTag, TagNotUnique, NonBooleanQueryValue, ArgumentNotCallable, DataNotIterable
 from .tag_definition import TagDefinition
 from .tagged_datum import TaggedDatum
 
