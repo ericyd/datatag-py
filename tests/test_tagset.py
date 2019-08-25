@@ -179,6 +179,12 @@ class TestQuery(unittest.TestCase):
         expected = ['blue_red']
         self.assertEqual(actual, expected)
 
+    def test_finds_all_data(self):
+        params = {}
+        actual = self.ts.query(params)
+        expected = [d.value for d in self.ts.dataset]
+        self.assertEqual(actual, expected)
+
 
 
 if __name__ == '__main__':
