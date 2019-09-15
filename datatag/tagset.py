@@ -102,6 +102,3 @@ class TagSet():
     def __is_included(self, mask, positive, negative = 0):
         """Check if a mask includes a positive number and excludes a negative number"""
         return mask & positive == positive and mask & negative == 0
-
-    def pickle(self, filepath = None):
-        print("Method not yet implemented. Goal is to be able to save a TagSet with all analyzed data and defined tags")

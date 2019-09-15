@@ -5,14 +5,14 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="inclusion",
-    version="0.1.0",
+    name="datatag",
+    version="1.0.0",
     author="Eric Dauenhauer",
     author_email="eric@ericyd.com",
-    description="Package for fast set intersection on datasets",
+    description="Lightweight, flexible data tagging and querying",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/ericyd/inclusion-py",
+    url="https://github.com/ericyd/datatag-py",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

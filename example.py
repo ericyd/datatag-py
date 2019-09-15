@@ -1,4 +1,10 @@
 from datatag import TagSet
+import io
+try:
+    import dill as pickle
+    should_pickle = True
+except ImportError:
+    should_pickle = False
 
 # helper methods to assist with printing
 def title(string):
@@ -132,7 +138,22 @@ class TestClass():
 
 tagset = TagSet()
 tagset.define_tag('value_is_true', lambda x: x.value == True)
-data = [TestClass('True1', True), TestClass('False1', False), TestClass('True2', True), TestClass('False2', False)]
+data = [TestClass('True', True), TestClass('False', False), TestClass('Truthy', 'True'), TestClass('True2', True)]
 tagset.analyze(data)
 results = print_results({'value_is_true': True})
-assert [r.name for r in results] == ['True1', 'True2']
+assert [r.name for r in results] == ['True', 'True2']
+
+
+
+if should_pickle:
+    title("You can pickle and un-pickle your tagset for re-use in other applications")
+    file = io.BytesIO()
+    pickle.dump(tagset, file)
+
+    # in another file...
+    file.seek(0)
+    tagset = pickle.load(file)
+    results = print_results({'value_is_true': False})
+    assert [r.name for r in results] == ['False', 'Truthy']
+else:
+    print("cannot demonstrate pickling because Package `dill` not installed")

@@ -51,3 +51,11 @@ If you want to re-use the same TagSet (and tag definitions) on a new dataset, yo
 `query` is how you retrieve data from your dataset that matches the tags passed.
 
 * `tags` parameter must be a dictionary with keys corresponding to tags that have already been defined, and Boolean values. When a value is `True`, the dataset will be filtered to only include results where that tag is `True` (present). When a value is `False`, the dataset will be filtered to only include results where that tag is `False` (absent). `tags` can support as many tags in the dictionary as are defined. Omitted tags are allowed to be either `True` (present) or `False` (absent). Therefore, the default argument of an empty dictionary `{}` will return all analyzed data in the dataset.
+
+## Pickling
+
+> **Note**: Pickling a TagSet class requires the package [`dill`](https://pypi.org/project/dill/) because the lambdas and functions used to define tags cannot be pickled with the standard library `pickle` module
+
+Instances of the main TagSet class contain all the information needed to tag and query your dataset. Therefore, it lends itself nicely to pickling if you need to analyze a large dataset and then re-use the analyzed set later with the same tags. Alternatively, you could pickle a TagSet with a large number of tags defined, and re-use it on an arbitrary number of datasets.
+
+A sample of how you might achieve this is shown at the end of `example.py`
